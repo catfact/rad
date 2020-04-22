@@ -19,6 +19,6 @@
 		"copyright" : "Copyright (c) 2018 Cycling '74"
 	},
 	"tags" : [ ],
-	"version" : "0.0.1",
+	"version" : "..",
 	"website" : "http://www.github.com/Cycling74/min-devkit"
 }
