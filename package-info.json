@@ -1,7 +1,7 @@
 {
-	"author" : "Cycling '74",
-	"description" : "Lightweight reference implementation of a package built using the Min-API.",
-	"homepatcher" : "C++ Object Development Kit.maxpat",
+	"author" : "dr_rad + catfact",
+	"description" : "chaotic signal generators",
+	"homepatcher" : "rad-lib-demo.maxpat",
 	"max_version_min" : "8.0", "max_version_max" : "none",
 	"name" : "rad",
 	"os" : {
@@ -15,10 +15,10 @@
 		}
 	},
 	"package_extra" : {
-		"reverse_domain" : "com.cycling74",
-		"copyright" : "Copyright (c) 2018 Cycling '74"
+		"reverse_domain" : "com.catfact",
+		"copyright" : "Copyright (c) 2018 Ezra Buchla"
 	},
 	"tags" : [ ],
-	"version" : "..",
-	"website" : "http://www.github.com/Cycling74/min-devkit"
+	"version" : "0.0.1",
+	"website" : "http://www.github.com/catfact/rad"
 }
