@@ -9,56 +9,52 @@ using namespace c74::min;
 
 class worb : public object<worb>, public sample_operator<0, 1> {
 private:
-  rad::Worb theWorb;
-
+    rad::Worb theWorb;
+    
 public:
-  MIN_DESCRIPTION{"locked-orbit chaotic map oscillator."};
-  MIN_TAGS{"audio, chaotic, oscillators"};
-  MIN_AUTHOR{"catfact + dr_rad"};
-  MIN_RELATED{"rad.fpu, rad.elca"};
-
-  inlet<> freq_in{this, "(number) base frequency"};
-  inlet<> period_in{this, "(number) period"};
-  outlet<> osc_out{this, "(signal) oscillator output", "signal"};
-
-  attribute<number> frequency{
-      this, "frequency", 1.0, description{"base update frequency in Hz"},
-      setter{MIN_FUNCTION{
-        theWorb.setRate(args[0], samplerate());
-        return args;
-      }}
-  };
-
-  attribute<number> period{
-      this, "period", 1.0, description{"period to search for (integer)"},
-      setter{MIN_FUNCTION{
-          theWorb.setPeriod(static_cast<int>(args[0]));
-          return args;
-      }}
-  };
-
-  attribute<number> gamma{
-      this, "gamma", 1.0, description{"gamma parameter"},
-      setter{MIN_FUNCTION{
-          theWorb.setGamma(args[0]);
-          return args;
-      }}
-  };
-
-  message<> m_number{this, "number", "", MIN_FUNCTION {
-    if (inlet == 0) {
-       theWorb.setRate(args[0]);
-    }
-    else if (inlet == 1) {
-      theWorb.setPeriod(static_cast<int>(args[0]));
-    }
-    else {
-      theWorb.setGamma(args[0]);
-    }
-    return {};
-  }};
-
-  sample operator()() { return theWorb.next(); }
+    MIN_DESCRIPTION{"locked-orbit chaotic map oscillator."};
+    MIN_TAGS{"audio, chaotic, oscillators"};
+    MIN_AUTHOR{"catfact + dr_rad"};
+    MIN_RELATED{""};
+    
+    inlet<> in1 {this, "(number) base frequency"};
+    inlet<> in2 {this, "(number) period (in [1, ?])"};
+    inlet<> in3 {this, "(number) gamma (smoothing parameter)"};
+    inlet<> in4 {this, "(number) beta (base logistic parameter)"};
+    inlet<> in5 {this, "(number) noise (noise
+        added to logistic param)"};
+    inlet<> in6 {this, "(number) state value"};
+    outlet<> out1 {this, "(signal) oscillator output", "signal"};
+    
+    message<> msg_number{this, "number", "", MIN_FUNCTION {
+        if (inlet == 0) {
+            theWorb.setRate(args[0]);
+        }
+        else if (inlet == 1) {
+            theWorb.setPeriod(std::max(static_cast<int>(args[0]), 1));
+        }
+        else if (inlet == 2) {
+            theWorb.setGamma(args[0]);
+        }
+        else if (inlet == 3) {
+            theWorb.setBase(args[0]);
+        }
+        else if (inlet == 4) {
+            theWorb.setNoise(args[0]);
+        }
+        else if (inlet == 5) {
+            theWorb.setState(args[0]);
+        }
+        return {};
+    }};
+    
+    message<> msg_reset { this, "reset", "reset map history with initial value", MIN_FUNCTION {
+        cout << "resetting the Worb" << endl;
+        theWorb.reset();
+        return {};
+    }};
+    
+    sample operator()() { return theWorb.next(); }
 };
 
 MIN_EXTERNAL(worb);
